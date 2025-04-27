@@ -57,7 +57,8 @@ function init() {
     // adding for debug and just getting something to work
     console.log("Data: ", data)
     // Get the names field
-
+    let names = d3.names
+    console.log("Names: ", names)
 
     // Use d3 to select the dropdown with id of `#selDataset`
 
