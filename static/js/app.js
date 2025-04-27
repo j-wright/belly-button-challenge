@@ -54,7 +54,8 @@ function buildCharts(sample) {
 // Function to run on page load
 function init() {
   d3.json("https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json").then((data) => {
-
+    // adding for debug and just getting something to work
+    console.log("Data: ", data)
     // Get the names field
 
 
