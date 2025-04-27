@@ -1,7 +1,7 @@
 // Build the metadata panel
 function buildMetadata(sample) {
   d3.json("https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json").then((data) => {
-
+    console.log("buildMetadata called with: ", sample)
     // get the metadata field
 
 
@@ -23,7 +23,7 @@ function buildMetadata(sample) {
 // function to build both charts
 function buildCharts(sample) {
   d3.json("https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json").then((data) => {
-
+    console.log("buildCharts called with: ", sample)
     // Get the samples field
 
 
@@ -61,25 +61,30 @@ function init() {
     console.log("Names: ", names)
 
     // Use d3 to select the dropdown with id of `#selDataset`
-    let drowpdown = d3.select("#selDataset")
+    let dropdown = d3.select("#selDataset")
+    console.log("dropdownmenu: ", dropdown)
 
     // Use the list of sample names to populate the select options
     // Hint: Inside a loop, you will need to use d3 to append a new
     // option for each sample name.
-  
+    dropdown.selectAll("option").data(names).enter().append("option").attr("value", function(d) {return d; }).text(function(d) {return d; });
 
     // Get the first sample from the list
-
+    let firstName =  names[0]
 
     // Build charts and metadata panel with the first sample
-
+    buildCharts(firstName)
+    buildMetadata(firstName)
   });
 }
 
 // Function for event listener
 function optionChanged(newSample) {
   // Build charts and metadata panel each time a new sample is selected
-
+  console.log("Event listener was activated.")
+  console.log("newSample: ", newSample)
+  buildCharts(newSample)
+  buildMetadata(newSample)
 }
 
 // Initialize the dashboard
