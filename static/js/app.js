@@ -3,20 +3,27 @@ function buildMetadata(sample) {
   d3.json("https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json").then((data) => {
     console.log("buildMetadata called with: ", sample)
     // get the metadata field
-
-
+    // console.log("data: ", data.metadata)
+    let metadata = data.metadata
+    // console.log("metadata", metadata)
     // Filter the metadata for the object with the desired sample number
-
-
+    let filteredData = metadata.filter(d => d.id.toString() === sample)[0]
+    console.log("filteredData: ", filteredData)
     // Use d3 to select the panel with id of `#sample-metadata`
-
+    let textBox = d3.select('#sample-metadata')
 
     // Use `.html("") to clear any existing metadata
-
+    textBox.html("")
 
     // Inside a loop, you will need to use d3 to append new
     // tags for each key-value in the filtered metadata.
-
+    textBox.append('p').html(`ID: ${filteredData.id}`)
+    textBox.append('p').html(`Ethnicity: ${filteredData.ethnicity}`)
+    textBox.append('p').html(`GENDER: ${filteredData.gender}`)
+    textBox.append('p').html(`AGE: ${filteredData.age}`)
+    textBox.append('p').html(`LOCATION: ${filteredData.location}`)
+    textBox.append('p').html(`BBTYPE: ${filteredData.bbtype}`)
+    textBox.append('p').html(`WFREQ: ${filteredData.wfreq}`)
   });
 }
 
@@ -32,19 +39,18 @@ function buildCharts(sample) {
     // Filter the samples for the object with the desired sample number
     let filteredData = samples.filter(d => d.id === sample)[0]
 
-    console.log(filteredData)
-    // console.log(filteredData[0].id)
+    console.log("filteredData: ", filteredData)
 
     // Get the otu_ids, otu_labels, and sample_values
     otu_ids = filteredData.otu_ids
     otu_labels = filteredData.otu_labels
     sample_values = filteredData.sample_values
+
     // console.log(otu_ids)
     // console.log(otu_labels)
     // console.log(sample_values)
 
     // Build a Bubble Chart
-    // testing bubble chart
     let trace1 = {
       x: otu_ids,
       y: sample_values,
@@ -60,9 +66,9 @@ function buildCharts(sample) {
     let dataBubble = [trace1];
 
     let layoutBubble = {
-     title: 'Bubble Chart Example',
+     title: 'Bacteria Cultures Per Sample',
      xaxis: { title: 'OTU ID' },
-     yaxis: { title: 'Y-axis' },
+     yaxis: { title: 'Number of Bacteria' },
      autosize: true
     };
 
@@ -72,26 +78,21 @@ function buildCharts(sample) {
 
 
     // For the Bar Chart, map the otu_ids to a list of strings for your yticks
-// testing bar chart
-let dataBar = [{
-  x: otu_ids,
-  y: sample_values,
-  type: 'bar',
-  hoverinfo: otu_labels
-}];
-
-let layout = {
-  title: 'Bar Chart Example',
-  xaxis: { title: 'Categories' },
-  yaxis: { title: 'Values' },
-  autosize: true
-};
-
-
-
     // Build a Bar Chart
     // Don't forget to slice and reverse the input data appropriately
+    let dataBar = [{
+      x: otu_ids.slice(0,10),
+      y: sample_values.slice(0,10),
+      type: 'bar',
+      orientation: 'h',
+      hoverinfo: otu_labels.slice(0,10)
+    }];
 
+  let layout = {
+    title: 'Top 10 Bacteria Cultures Found',
+    xaxis: { title: 'Number of Bacteria', categoryorder: 'total descending'},
+    autosize: true
+  };
 
     // Render the Bar Chart
     Plotly.newPlot('bar', dataBar, layout);
